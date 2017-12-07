@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/swapnilraj/assignment/daemon"
-	"github.com/swapnilraj/assignment/server"
+	"github.com/swapnilraj/go-daemon-server/daemon"
+	"github.com/swapnilraj/go-daemon-server/server"
 )
 
 const defaultPort = ":8081"
