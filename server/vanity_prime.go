@@ -4,6 +4,8 @@ import (
 	"crypto/rand"
 	"io"
 	"math/big"
+  "fmt"
+  _"errors"
 )
 
 // smallPrimes is a list of small, prime numbers that allows us to rapidly
@@ -32,7 +34,10 @@ func vanityPrime(vanity string) (p *big.Int, err error) {
 	bytes := make([]byte, 128)
 	p = new(big.Int)
 
-	bigMod := new(big.Int)
+  vanityBytes := new(big.Int)
+  vanityBytes, _ = vanityBytes.SetString(vanity[2:], 16)
+	
+  bigMod := new(big.Int)
 
 	for {
 		_, err = io.ReadFull(rand.Reader, bytes)
