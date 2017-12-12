@@ -2,9 +2,6 @@ package main
 
 import (
 	"os"
-
-	"github.com/swapnilraj/go-daemon-server/daemon"
-	"github.com/swapnilraj/go-daemon-server/server"
 )
 
 const defaultPort = ":8081"
@@ -16,9 +13,9 @@ func process() {
 	if len(os.Args) > 1 {
 		port = ":" + os.Args[1]
 	}
-	server.Init(port)
+	Init(port)
 }
 
 func main() {
-	daemon.Run(process)
+	Run(process)
 }
