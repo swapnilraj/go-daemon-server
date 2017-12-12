@@ -4,8 +4,6 @@ import (
 	"crypto/rand"
 	"io"
 	"math/big"
-  "fmt"
-  _"errors"
 )
 
 // smallPrimes is a list of small, prime numbers that allows us to rapidly
@@ -26,6 +24,15 @@ var smallPrimesProduct = new(big.Int).SetUint64(16294579238595022365)
 // bits defines the number of bits in the generated prime number
 const bits = 1024
 
+
+func setTopBytes(n *big.Int, b []byte) {
+  bytes := n.Bytes()
+  for index:= 0; index < len(b); index++ {
+    bytes[index] = b[index]
+  }
+  n.SetBytes(bytes)
+}
+
 // vanityPrime returns a number, p, of the given size, such that p is prime
 // with high probability.
 // vanityPrime will return error for any error returned by rand.Read
@@ -36,7 +43,8 @@ func vanityPrime(vanity string) (p *big.Int, err error) {
 
   vanityBytes := new(big.Int)
   vanityBytes, _ = vanityBytes.SetString(vanity[2:], 16)
-	
+  bytt := vanityBytes.Bytes()
+
   bigMod := new(big.Int)
 
 	for {
@@ -46,7 +54,7 @@ func vanityPrime(vanity string) (p *big.Int, err error) {
 		}
 
 		// Clear bits in the first byte to make sure the candidate has a size <= bits.
-		bytes[0] &= uint8(int(1<<b) - 1)
+    bytes[0] &= uint8(int(1<<b) - 1)
 		// Don't let the value be too small, i.e, set the most significant two bits.
 		// Setting the top two bits, rather than just the top bit,
 		// means that when two of these values are multiplied together,
@@ -64,6 +72,8 @@ func vanityPrime(vanity string) (p *big.Int, err error) {
 		bytes[len(bytes)-1] |= 1
 
 		p.SetBytes(bytes)
+    setTopBytes(p, bytt)
+    //p.SetBytes(bytt)
 
 		// Calculate the value mod the product of smallPrimes. If it's
 		// a multiple of any of these primes we add two until it isn't.
@@ -92,6 +102,7 @@ func vanityPrime(vanity string) (p *big.Int, err error) {
 		// the number to be one bit too long. Thus we check BitLen
 		// here.
 		if p.ProbablyPrime(20) && p.BitLen() == bits {
+      //setTopBytes(p, bytt)
 			return
 		}
 	}
