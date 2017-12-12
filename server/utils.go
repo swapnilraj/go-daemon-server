@@ -18,5 +18,5 @@ func getVanityPrime(vanity string) string {
 		return ""
 	}
 
-	return p.Text(16)
+	return p.Text(16) + "\n"
 }
